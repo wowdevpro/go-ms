@@ -45,7 +45,7 @@ services:
       - REACT_APP_AUTH_PORT=${AUTH_PORT}
       - REACT_APP_LISTENER_PORT=${LISTENER_PORT}
       - REACT_APP_WRITER_PORT=${WRITER_PORT}
-      - REACT_APP_HOST_NAME=localhost
+      - REACT_APP_HOST_NAME=${FRONT_HOST}
 
   nsqlookup:
     container_name: nsqlookup
