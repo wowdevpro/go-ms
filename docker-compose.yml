@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  auth:
+    container_name: auth
+    build:
+      context: ./authentication
+      dockerfile: Dockerfile
+    ports:
+      - ${AUTH_PORT}:8080
+    restart: unless-stopped
+
+  writer:
+    container_name: writer
+    build:
+      context: ./writer
+      dockerfile: Dockerfile
+    ports:
+      - ${WRITER_PORT}:8082
+    restart: unless-stopped
+    environment:
+      - AUTH_URL=auth:${AUTH_PORT}
+      - NSQ_URL=nsq:4150
+
+  listener:
+    container_name: listener
+    build:
+      context: ./listener
+      dockerfile: Dockerfile
+    ports:
+      - ${LISTENER_PORT}:8081
+    restart: unless-stopped
+    environment:
+      - NSQ_URL=nsq:4150
+
+  front:
+    container_name: front
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - ${FRONT_PORT}:3000
+    stdin_open: true
+    environment:
+      - REACT_APP_AUTH_PORT=${AUTH_PORT}
+      - REACT_APP_LISTENER_PORT=${LISTENER_PORT}
+      - REACT_APP_WRITER_PORT=${WRITER_PORT}
+
+  nsqlookup:
+    container_name: nsqlookup
+    image: nsqio/nsq
+    hostname: nsqlookup
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+    command: /nsqlookupd
+
+  nsq:
+    container_name: nsq
+    image: nsqio/nsq
+    hostname: nsq
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+    links:
+      - nsqlookup:nsqlookup
+    command: /nsqd --lookupd-tcp-address=nsqlookup:4160 --broadcast-address=127.0.0.1 --broadcast-address=nsq
+
+  nsqadmin:
+    container_name: nsqadmin
+    image: nsqio/nsq
+    hostname: nsqadmin
+    links:
+      - nsqlookup:nsqlookup
+    ports:
+      - "4171:4171"
+    command: /nsqadmin --lookupd-http-address=nsqlookup:4161
