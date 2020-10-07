@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class Auth {
-    _apiBase = 'http://localhost:' + (process.env.REACT_APP_AUTH_PORT ?? "8080");
+    _apiBase = 'http://' + (process.env.REACT_APP_HOST_NAME ?? "localhost") + ':' + (process.env.REACT_APP_AUTH_PORT ?? "8080");
     _config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     };

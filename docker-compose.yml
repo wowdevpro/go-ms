@@ -45,11 +45,11 @@ services:
       - REACT_APP_AUTH_PORT=${AUTH_PORT}
       - REACT_APP_LISTENER_PORT=${LISTENER_PORT}
       - REACT_APP_WRITER_PORT=${WRITER_PORT}
+      - REACT_APP_HOST_NAME=localhost
 
   nsqlookup:
     container_name: nsqlookup
     image: nsqio/nsq
-    hostname: nsqlookup
     ports:
       - "4160:4160"
       - "4161:4161"
@@ -58,7 +58,6 @@ services:
   nsq:
     container_name: nsq
     image: nsqio/nsq
-    hostname: nsq
     ports:
       - "4150:4150"
       - "4151:4151"
@@ -69,7 +68,6 @@ services:
   nsqadmin:
     container_name: nsqadmin
     image: nsqio/nsq
-    hostname: nsqadmin
     links:
       - nsqlookup:nsqlookup
     ports:

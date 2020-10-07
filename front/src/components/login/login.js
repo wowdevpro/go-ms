@@ -21,7 +21,11 @@ const Login = (props) => {
         authService.login(login, password).then(res => {
             props.setToken(res.data);
         }).catch(err => {
-            setError(err.response.data)
+            if(err.response !== undefined) {
+                setError(err.response.data);
+            } else {
+                setError("Service error");
+            }
         });
     }
 

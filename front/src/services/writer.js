@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class Writer {
-    _apiBase = 'http://localhost:' + (process.env.REACT_APP_WRITER_PORT ?? "8082");
+    _apiBase = 'http://' + (process.env.REACT_APP_HOST_NAME ?? "localhost") + ':' + (process.env.REACT_APP_WRITER_PORT ?? "8082");
     _config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     };
