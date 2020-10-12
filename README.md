@@ -1,5 +1,5 @@
 # go-ms
-dopcker-compose up -d
+docker-compose up -d
 
 Frontend default url: localhost:9001
 
